@@ -6,11 +6,11 @@ from scipy.signal import butter, lfilter, freqz
 from scipy import signal
 data_after_applying_filter = []
 
-cutoff = 3000 #in Hz
+cutoff = 65000 #in Hz
 fs = 114*1000 # 5micro samples per second
 order = 5
-NOISE_SIZE = 350
-ECHO_SIZE = 200
+NOISE_SIZE = 250
+ECHO_SIZE = 512
 THRESHOLD = 0.15
 
 def butter_lowpass(cutoff, fs, order):
@@ -54,6 +54,7 @@ def peak_value(data):
     
 def get_echos(filtered_values):
     all_echo_range = [] 
+    cut_index_list = []
     for index, data in enumerate(filtered_values):
         chopped_data = data[NOISE_SIZE:]
         max_point_distance = peak_value(chopped_data)
@@ -63,12 +64,20 @@ def get_echos(filtered_values):
                 echo_range = chopped_data[cutting_distance:]
                 echo_range = echo_range[:ECHO_SIZE]
                 all_echo_range.append(echo_range)
-    return all_echo_range
+            else:
+                cut_index_list.append(index)
+    return all_echo_range, cut_index_list
 
 def save_to_csv(echo_set, folder, file):
     df = pd.DataFrame(echo_set)
     print(folder,file)
     df.to_csv('./Documents/data_set/Result/{}/{}_overall.csv'.format(folder, file), header=False, index=False)
+
+
+def time_domain_values(file_name):
+    time_domain_data_without_offset = get_time_domain_without_offset(file_name)
+    echos_data =  get_echos(time_domain_data_without_offset)
+    return echos_data
 
 if __name__ == '__main__':
     print('data_processing')

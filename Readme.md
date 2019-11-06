@@ -22,3 +22,6 @@ The packages required are
 -   matplotlib
 -   pyQt5
 -   sklearn
+
+
+#``pyuic5 MainWindow.ui > MainWindow.py``
