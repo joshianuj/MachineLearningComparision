@@ -18,7 +18,7 @@
     <rect>
      <x>50</x>
      <y>20</y>
-     <width>411</width>
+     <width>221</width>
      <height>111</height>
     </rect>
    </property>
@@ -73,7 +73,7 @@
     <rect>
      <x>50</x>
      <y>150</y>
-     <width>411</width>
+     <width>311</width>
      <height>501</height>
     </rect>
    </property>
@@ -140,6 +140,11 @@
       <string>File</string>
      </property>
     </column>
+    <column>
+     <property name="text">
+      <string>Add Plot</string>
+     </property>
+    </column>
    </widget>
    <widget class="QPushButton" name="btn_start_echo">
     <property name="geometry">
@@ -158,10 +163,10 @@
   <widget class="QScrollArea" name="scrollArea">
    <property name="geometry">
     <rect>
-     <x>520</x>
-     <y>20</y>
-     <width>691</width>
-     <height>781</height>
+     <x>500</x>
+     <y>10</y>
+     <width>601</width>
+     <height>421</height>
     </rect>
    </property>
    <property name="widgetResizable">
@@ -172,8 +177,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>689</width>
-      <height>779</height>
+      <width>599</width>
+      <height>419</height>
      </rect>
     </property>
    </widget>
