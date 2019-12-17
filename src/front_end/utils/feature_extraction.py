@@ -5,8 +5,9 @@ import xlrd
 import matplotlib.pyplot as plt
 from numpy.fft import fft, fftfreq, ifft, rfft
 
+
 def fft_from_data_frame(data_frame):
-    fs= 114e3
+    fs = 114e3
     signal_set = []
     for row in data_frame.values:
         fft_data = fft(row, n=row.size)/row.size
