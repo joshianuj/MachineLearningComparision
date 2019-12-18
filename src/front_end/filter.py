@@ -4,19 +4,34 @@ import numpy as np
 from scipy.signal import butter, lfilter, freqz
 from scipy import signal
 
-from utils.peaks_util import find_echo_from_peaks
+from utils.peaks_util import get_echo_peaks
 
 SAMPLE_FREQUENCY_COMBO_BOX = {
     '2.86MHz': {
         'value': 2.86*1e6,
-        'echo_size': 2056,
+        'echo_size': 4096,
+        'noise_size': 0,
+        'threshold': 0.15,
+        'variance_threshold': 0.02,
+        'echo': './data/echo/2MHz/',
+        'features': './data/features/2MHz/',
     }, '1.14MHz': {
         'value': 1.14*1e6,
-        'echo_size': 1024,
+        'echo_size': 2048,
+        'noise_size': 0,
+        'threshold': 0.15,
+        'variance_threshold': 0.02,
+        'echo': './data/echo/1MHz/',
+        'features': './data/features/1MHz/',
     },
-    '114MHz': {
+    '114KHz': {
         'value': 114*1e6,
         'echo_size': 1024,
+        'noise_size': 350,
+        'threshold': 0.15,
+        'variance_threshold': 0.02,
+        'echo': './data/echo/114KHz/',
+        'features': './data/features/114KHz/',
     }
 }
 
@@ -26,17 +41,21 @@ class DataProcessor:
         self.selected_element = SAMPLE_FREQUENCY_COMBO_BOX['2.86MHz']
         self.LOW_PASS = 60*1e3
         self.HIGH_PASS = 30*1e3
-        self.NOISE_SIZE = 350
+        self.NOISE_SIZE = SAMPLE_FREQUENCY_COMBO_BOX['2.86MHz']['noise_size']
         self.THRESHOLD = 0.15
         self.DATA_HEADERS_SIZE = 9
         self.ECHO_SIZE_LEFT = 300
-        self.ECHO_SIZE = 1024
+        self.ECHO_SIZE = SAMPLE_FREQUENCY_COMBO_BOX['2.86MHz']['echo_size']
         self.order = 5
-        self.VARIANCE_THRESHOLD = 0.02
+        self.VARIANCE_THRESHOLD = SAMPLE_FREQUENCY_COMBO_BOX['2.86MHz']['variance_threshold']
 
     def change_selected_element(self, element_name):
         if element_name in SAMPLE_FREQUENCY_COMBO_BOX:
             self.selected_element = SAMPLE_FREQUENCY_COMBO_BOX[element_name]
+            self.ECHO_SIZE = SAMPLE_FREQUENCY_COMBO_BOX[element_name]['echo_size']
+            self.NOISE_SIZE = SAMPLE_FREQUENCY_COMBO_BOX[element_name]['noise_size']
+            self.THRESHOLD = SAMPLE_FREQUENCY_COMBO_BOX[element_name]['threshold']
+            self.VARIANCE_THRESHOLD = SAMPLE_FREQUENCY_COMBO_BOX[element_name]['variance_threshold']
 
     def butter_lowpass(self, cutoff, fs, order):
         nyq = 0.5 * fs
@@ -53,7 +72,7 @@ class DataProcessor:
     def apply_filter(self, data):
         b, a = self.butter_lowpass(
             self.LOW_PASS, self.selected_element['value'], order=self.order)
-        #y = lfilter(b, a, data)
+        # y = lfilter(b, a, data)
         y = signal.filtfilt(b, a, data)
 
         b, a = self.butter_highpass(
@@ -133,9 +152,28 @@ class DataProcessor:
             echo_set.append(echos)
         return echo_set
 
-    def find_peaks_from_data_frame(self, dataframe):
-        rollig_variance_dataframe = dataframe.rolling(window=100, axis=1).var()
-        echo_set = []
-        for d in rollig_variance_dataframe.values:
-            peaks, _ = find_peaks(d, height=self.VARIANCE_THRESHOLD)
-            echo_set.append(find_echo_from_peaks(peaks))
+    def find_echos(self, data_values):
+        # data_values = data_values[:, self.NOISE_SIZE:]
+        dfObj = pd.DataFrame(data_values)
+        rolling_variance_dataframe = dfObj.rolling(
+            window=100, axis=1).var()
+        echo_list = []
+        for i, d in enumerate(rolling_variance_dataframe.values):
+            peaks, _ = signal.find_peaks(d, height=self.VARIANCE_THRESHOLD)
+            if len(peaks):
+                echo_peaks = get_echo_peaks(
+                    peaks, self.ECHO_SIZE, self.ECHO_SIZE_LEFT)
+                if len(echo_peaks):
+                    for index, e in enumerate(echo_peaks):
+                        echo_left_size = e - self.ECHO_SIZE_LEFT
+                        echo_data = {
+                            'ECHO': data_values[i][slice(echo_left_size, echo_left_size+self.ECHO_SIZE)],
+                            'ECHO_COUNTER': index + 1
+                        }
+                        echo_list.append(echo_data)
+        if len(echo_list):
+            df = pd.DataFrame.from_dict(echo_list)
+            df_with_echo = pd.concat(
+                [df.ECHO_COUNTER, pd.DataFrame(df.ECHO.tolist())], axis=1)
+            return df_with_echo
+        return None

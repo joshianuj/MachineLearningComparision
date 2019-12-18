@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1600</width>
-    <height>1200</height>
+    <width>1280</width>
+    <height>755</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -136,9 +136,9 @@
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>210</y>
-     <width>411</width>
-     <height>501</height>
+     <y>200</y>
+     <width>401</width>
+     <height>431</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -196,7 +196,7 @@
     </property>
     <column>
      <property name="text">
-      <string>Distance</string>
+      <string>Type</string>
      </property>
     </column>
     <column>
@@ -206,12 +206,12 @@
     </column>
     <column>
      <property name="text">
-      <string>Add Plot</string>
+      <string>Folder</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>Folder</string>
+      <string>Add Plot</string>
      </property>
     </column>
     <column>
@@ -225,12 +225,12 @@
      <rect>
       <x>80</x>
       <y>80</y>
-      <width>181</width>
+      <width>271</width>
       <height>32</height>
      </rect>
     </property>
     <property name="text">
-     <string>Save echo to file</string>
+     <string>Save Echo And Features</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="echo_file_name">
@@ -262,8 +262,8 @@
     <rect>
      <x>470</x>
      <y>10</y>
-     <width>881</width>
-     <height>421</height>
+     <width>791</width>
+     <height>711</height>
     </rect>
    </property>
    <property name="widgetResizable">
@@ -274,8 +274,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>879</width>
-      <height>419</height>
+      <width>789</width>
+      <height>709</height>
      </rect>
     </property>
    </widget>

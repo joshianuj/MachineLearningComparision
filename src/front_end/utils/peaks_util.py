@@ -1,10 +1,11 @@
-def find_echo_from_peaks(peaks, window_size=1024):
+def get_echo_peaks(peaks, window_size=1024, echo_left_size=256):
+    prev_value = peaks[0]
     echos = []
-    if len(peaks):
-        prev_value = peaks[0]
-        echos = [peaks[0]]
-        for i in peaks:
-            if i - prev_value > window_size:
+    for i in peaks:
+        if len(echos):
+            if i - prev_value > 1024:
                 echos.append(i)
-            prev_value = i
-    echos
+        if not len(echos) and i > echo_left_size:
+            echos = [i]
+        prev_value = i
+    return echos
