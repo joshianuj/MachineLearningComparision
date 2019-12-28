@@ -17,6 +17,9 @@ from utils import data_processing, feature_extraction
 from ui_files import MainWindow
 from filter import DataProcessor
 import pandas as pd
+from utils.plot_canvas import PlotCanvas
+
+import numpy as np
 
 
 class MainWindow(QMainWindow, MainWindow.Ui_MainWindow):
@@ -34,10 +37,24 @@ class MainWindow(QMainWindow, MainWindow.Ui_MainWindow):
         self.data_processing = DataProcessor()
 
         # parameter_frame
-        self.echo_size.textChanged.connect(self.update_echo_size)
-        self.noise_size.textChanged.connect(self.update_noise_size)
+        # self.echo_size.textChanged.connect(self.update_echo_size)
+        # self.noise_size.textChanged.connect(self.update_noise_size)
+        self.plot_index.currentTextChanged.connect(
+            self.add_plots)
         self.sample_frequency.currentTextChanged.connect(
             self.on_combobox_changed)
+
+        # canvas
+        self.echo_plot = PlotCanvas(self, width=4, height=7, title="Echo data")
+        self.echo_box.addWidget(self.echo_plot)
+
+        self.time_domain_plot = PlotCanvas(
+            self, width=4, height=7, title="Time Domain data")
+        self.signal_box.addWidget(self.time_domain_plot)
+
+        self.fft_plot = PlotCanvas(
+            self, width=4, height=7, title="FFT data")
+        self.fft_box.addWidget(self.fft_plot)
 
         # show UI
         self.show()
@@ -69,26 +86,29 @@ class MainWindow(QMainWindow, MainWindow.Ui_MainWindow):
             self.error_dailog('Value Should not have String')
 
     def load_file(self):
-        directory = str(QFileDialog.getExistingDirectory(
-            self, "Select Directory"))
-        paths = glob(f'{directory}/*/*')
-        files = []
-        if len(paths) > 0:
-            for p in paths:
-                files += glob(f'{p}/*.csv')
-        if not files:
-            files = paths
-        new_files_set = []
-        for item in files:
-            new_files_set.append({
-                'folder_name': int(item.split('/')[-2]),
-                'file_name': basename(item),
-                'absolute_path': item,
-                'type': item.split('/')[-4].upper(),
-                'model': item.split('/')[-3],
-            })
-        self.load_files_in_table(
-            sorted(new_files_set, key=lambda i: i['folder_name']))
+        try:
+            directory = str(QFileDialog.getExistingDirectory(
+                self, "Select Directory"))
+            paths = glob(f'{directory}/*/*')
+            files = []
+            if len(paths) > 0:
+                for p in paths:
+                    files += glob(f'{p}/*.csv')
+            if not files:
+                files = paths
+            new_files_set = []
+            for item in files:
+                new_files_set.append({
+                    'folder_name': int(item.split('/')[-2]),
+                    'file_name': basename(item),
+                    'absolute_path': item,
+                    'type': item.split('/')[-4].upper(),
+                    'model': item.split('/')[-3],
+                })
+            self.load_files_in_table(
+                sorted(new_files_set, key=lambda i: i['folder_name']))
+        except:
+            self.error_dailog('Please choose a file')
 
     def load_files_in_table(self, files):
         self.files = files
@@ -106,41 +126,39 @@ class MainWindow(QMainWindow, MainWindow.Ui_MainWindow):
             self.table_widget.setCellWidget(row, 3, btn)
 
     def make_chart_with_file_index(self, file_name):
-        import re
-        # index = int(re.search(r'\d+', self.sender().text()).group())
-        index = int(re.search(r'\d+', self.sender().objectName))
-        qscrollContents = QWidget()
-        qscrollLayout = QVBoxLayout(qscrollContents)
-        self.scrollAreaWidget = qscrollLayout
-        self.scrollArea.setWidget(qscrollContents)
+        try:
+            import re
+            # index = int(re.search(r'\d+', self.sender().text()).group())
+            index = int(re.search(r'\d+', self.sender().objectName).group())
 
-        time_domain_data_set = self.data_processing.get_time_domain_without_offset(
-            self.files[index]['absolute_path'])
-        filtered_data = self.data_processing.get_filtered_values(
-            time_domain_data_set)
-        echos_data = self.data_processing.get_echos(filtered_data)
+            self.time_domain_data_set = self.data_processing.get_time_domain_without_offset(
+                self.files[index]['absolute_path'])
 
-        qfigWidget = QWidget(qscrollContents)
-        fig = Figure((10.0, 10.0))
-        canvas = FigureCanvas(fig)
-        canvas.setParent(qfigWidget)
-        toolbar = NavigationToolbar(canvas, qfigWidget)
-        axes = fig.add_subplot(2, 2, 1)
-        axes.plot(time_domain_data_set.values[0])
-        axes = fig.add_subplot(2, 2, 2)
-        axes.plot(echos_data[0])
+            self.plot_index.clear()
+            for i in range(self.time_domain_data_set.shape[0]):
+                self.plot_index.addItem(str(i))
 
-        # place plot components in a layout
-        plotLayout = QVBoxLayout()
-        plotLayout.addWidget(canvas)
-        plotLayout.addWidget(toolbar)
-        qfigWidget.setLayout(plotLayout)
+        except:
+            self.error_dailog('Chart cannot be created')
 
-        # prevent the canvas to shrink beyond a point
-        # original size looks like a good minimum size
-        # canvas.setMinimumSize(canvas.size())
-        qscrollLayout.addWidget(qfigWidget)
-        qscrollContents.setLayout(qscrollLayout)
+    def add_plots(self, value):
+        try:
+            if value:
+                index = int(value)
+                filtered_data_values = self.data_processing.get_filtered_values(
+                    self.time_domain_data_set)
+                echos_data = self.data_processing.get_echo_with_index(
+                    filtered_data_values[index])
+                self.time_domain_plot.plot(filtered_data_values[index])
+                if echos_data:
+                    self.echo_plot.plot(echos_data[0]['ECHO'])
+                    x, y = feature_extraction.fft_chart_value(
+                        np.array(echos_data[0]['ECHO']), self.data_processing.selected_element['value'])
+                    self.fft_plot.plot_x_y(x, y)
+                else:
+                    self.echo_plot.plot([])
+        except:
+            self.error_dailog('Combobox not ready, please Plot first')
 
     def get_features_from_echo(self, echos_data, row):
         df_fft = echos_data.iloc[:, 1:]
@@ -166,7 +184,7 @@ class MainWindow(QMainWindow, MainWindow.Ui_MainWindow):
                     time_domain_data_set)
                 echos_data = self.data_processing.find_echos(
                     filtered_data_values)
-                if type(echos_data) != None:
+                if isinstance(echos_data, pd.DataFrame):
                     row = {
                         'type': file['absolute_path'].split('/')[-4].upper(),
                         'model': file['absolute_path'].split('/')[-3],
