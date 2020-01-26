@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-import xlrd
 
 import matplotlib.pyplot as plt
 from numpy.fft import fft, fftfreq, ifft, rfft

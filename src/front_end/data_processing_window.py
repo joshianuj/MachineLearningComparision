@@ -22,10 +22,11 @@ from utils.plot_canvas import PlotCanvas
 import numpy as np
 
 
-class MainWindow(QMainWindow, MainWindow.Ui_MainWindow):
-    def __init__(self, *args, **kwargs):
-        super(MainWindow, self).__init__(*args, **kwargs)
+class DataProcessingWindow(QMainWindow, MainWindow.Ui_MainWindow):
+    def __init__(self, channel, *args, **kwargs):
+        super(DataProcessingWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
+        self.channel = channel
 
         # Setup Operations
         self.btn_load_file.pressed.connect(self.load_file)
@@ -45,19 +46,26 @@ class MainWindow(QMainWindow, MainWindow.Ui_MainWindow):
             self.on_combobox_changed)
 
         # canvas
-        self.echo_plot = PlotCanvas(self, width=4, height=7, title="Echo data")
+        self.echo_plot = PlotCanvas(self, width=5, height=5, dpi=70, title="Echo data")
         self.echo_box.addWidget(self.echo_plot)
 
         self.time_domain_plot = PlotCanvas(
-            self, width=4, height=7, title="Time Domain data")
+            self, width=5, height=5, dpi=70, title="Time Domain data")
         self.signal_box.addWidget(self.time_domain_plot)
 
         self.fft_plot = PlotCanvas(
-            self, width=4, height=7, title="FFT data")
+            self, width=5, height=5, dpi=75, title="FFT data")
         self.fft_box.addWidget(self.fft_plot)
 
-        # show UI
-        self.show()
+        self.btn_data_open.setEnabled(False)
+        self.btn_ml_open.pressed.connect(self.channel.open_ml_window)
+        self.btn_ml_prediction_open.pressed.connect(
+            self.channel.open_ml_prediction_window)
+
+        # self.show()
+
+    def set_controller(self, controller):
+        self.controller = controller
 
     def on_combobox_changed(self, value):
         self.data_processing.change_selected_element(value)
@@ -206,10 +214,20 @@ class MainWindow(QMainWindow, MainWindow.Ui_MainWindow):
             fft_data_set.to_csv(
                 f"{self.data_processing.selected_element['features']}{self.echo_file_name.text()}.csv")
 
+    @pyqtSlot()
+    def open_ml_window(self):
+        self.machine_learning_window.show()
+        self.close()
+
+    @pyqtSlot()
+    def open_ml_prediction_window(self):
+        self.machine_learning_prediction_window.show()
+        self.close()
+
 
 if __name__ == '__main__':
     app = QApplication([])
     app.setApplicationName("Data Analysis")
 
-    window = MainWindow()
+    window = DataProcessingWindow()
     app.exec_()
