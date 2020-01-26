@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QWidget" name="MainWindow">
+ <class>MachineLearning</class>
+ <widget class="QWidget" name="MachineLearning">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,15 +11,15 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>MachineLearning</string>
   </property>
-  <widget class="QFrame" name="parameter_frame">
+  <widget class="QFrame" name="mlp_frame">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>410</x>
      <y>50</y>
-     <width>421</width>
-     <height>181</height>
+     <width>471</width>
+     <height>531</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -28,7 +28,96 @@
    <property name="frameShadow">
     <enum>QFrame::Raised</enum>
    </property>
-   <widget class="QLabel" name="label_load_2">
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>10</y>
+      <width>231</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>MLP Confusion Matrix</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>30</y>
+      <width>451</width>
+      <height>491</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="mlp_plot"/>
+   </widget>
+  </widget>
+  <widget class="QFrame" name="frame">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>130</y>
+     <width>391</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QComboBox" name="process_selection">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>311</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Train Model Human Non Human</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Train Model Other Objects</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>271</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Selection</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QFrame" name="parameter_frame">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>50</y>
+     <width>391</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QLabel" name="label_load_3">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -39,32 +128,6 @@
     </property>
     <property name="text">
      <string>Initial Parameters</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>70</y>
-      <width>81</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Echo size</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>110</y>
-      <width>81</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Noise size</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_4">
@@ -105,40 +168,14 @@
      </property>
     </item>
    </widget>
-   <widget class="QLabel" name="echo_size">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>70</y>
-      <width>81</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>4096</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="noise_size">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>110</y>
-      <width>81</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>0</string>
-    </property>
-   </widget>
   </widget>
   <widget class="QFrame" name="files_frame">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>240</y>
-     <width>421</width>
-     <height>571</height>
+     <x>10</x>
+     <y>300</y>
+     <width>391</width>
+     <height>121</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -163,9 +200,9 @@
    <widget class="QPushButton" name="btn_load_file">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>120</x>
       <y>10</y>
-      <width>251</width>
+      <width>261</width>
       <height>32</height>
      </rect>
     </property>
@@ -173,72 +210,25 @@
      <string>Load Files</string>
     </property>
    </widget>
-   <widget class="QTableWidget" name="table_widget">
+   <widget class="QPushButton" name="btn_save_model">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>150</y>
-      <width>401</width>
-      <height>401</height>
-     </rect>
-    </property>
-    <property name="minimumSize">
-     <size>
-      <width>401</width>
-      <height>0</height>
-     </size>
-    </property>
-    <property name="maximumSize">
-     <size>
-      <width>401</width>
-      <height>16777215</height>
-     </size>
-    </property>
-    <column>
-     <property name="text">
-      <string>Type</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>File</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Folder</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Add Plot</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string/>
-     </property>
-    </column>
-   </widget>
-   <widget class="QPushButton" name="btn_save_echo">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
+      <x>220</x>
       <y>80</y>
-      <width>261</width>
+      <width>161</width>
       <height>32</height>
      </rect>
     </property>
     <property name="text">
-     <string>Save Echo</string>
+     <string>Save Model</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="echo_file_name">
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>170</x>
       <y>50</y>
-      <width>191</width>
+      <width>201</width>
       <height>21</height>
      </rect>
     </property>
@@ -248,22 +238,127 @@
      <rect>
       <x>10</x>
       <y>50</y>
-      <width>91</width>
+      <width>111</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Echo file name</string>
+     <string>Model file name</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_train">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>80</y>
+      <width>141</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Start Training</string>
     </property>
    </widget>
   </widget>
-  <widget class="QFrame" name="signal_frame">
+  <widget class="QFrame" name="random_forest_frame">
    <property name="geometry">
     <rect>
-     <x>460</x>
+     <x>890</x>
      <y>50</y>
+     <width>481</width>
+     <height>531</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QLabel" name="label_9">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>271</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Random Forest Confusion Matrix</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_4">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>30</y>
+      <width>461</width>
+      <height>491</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="rf_plot"/>
+   </widget>
+  </widget>
+  <widget class="QTableWidget" name="table_widget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>430</y>
+     <width>401</width>
+     <height>291</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>401</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>401</width>
+     <height>16777215</height>
+    </size>
+   </property>
+   <column>
+    <property name="text">
+     <string>Label</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Total</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Train</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Test</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string/>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string/>
+    </property>
+   </column>
+  </widget>
+  <widget class="QFrame" name="machine_learning_method">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>220</y>
      <width>391</width>
-     <height>381</height>
+     <height>71</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -275,115 +370,40 @@
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>141</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Time Domain Chart</string>
-    </property>
-   </widget>
-   <widget class="QWidget" name="verticalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>40</y>
-      <width>371</width>
-      <height>331</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="signal_box"/>
-   </widget>
-   <widget class="QComboBox" name="plot_index">
-    <property name="geometry">
-     <rect>
-      <x>150</x>
-      <y>10</y>
-      <width>151</width>
-      <height>26</height>
-     </rect>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QFrame" name="fft_frame">
-   <property name="geometry">
-    <rect>
-     <x>460</x>
-     <y>440</y>
-     <width>821</width>
-     <height>361</height>
-    </rect>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
-   </property>
-   <widget class="QLabel" name="label_7">
-    <property name="geometry">
-     <rect>
       <x>20</x>
       <y>10</y>
-      <width>141</width>
+      <width>271</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>FFT Chart</string>
+     <string>Train Size</string>
     </property>
    </widget>
-   <widget class="QWidget" name="verticalLayoutWidget_3">
+   <widget class="QSlider" name="trainSize">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>30</y>
-      <width>801</width>
-      <height>321</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="fft_box"/>
-   </widget>
-  </widget>
-  <widget class="QFrame" name="signal_frame_2">
-   <property name="geometry">
-    <rect>
-     <x>860</x>
-     <y>50</y>
-     <width>421</width>
-     <height>381</height>
-    </rect>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
-   </property>
-   <widget class="QWidget" name="verticalLayoutWidget_2">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>40</y>
-      <width>401</width>
-      <height>331</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="echo_box"/>
-   </widget>
-   <widget class="QLabel" name="label_6">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
+      <x>110</x>
       <y>10</y>
-      <width>141</width>
-      <height>16</height>
+      <width>251</width>
+      <height>22</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Echo Chart</string>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txt_train_size">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>40</y>
+      <width>211</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="placeholderText">
+     <string>Train Size</string>
     </property>
    </widget>
   </widget>
